@@ -197,16 +197,13 @@ class UserViewSet(viewsets.ModelViewSet):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
-            # Check if user exists, else create
+            # Check if user exists
             try:
                 user = User.objects.get(email=email)
             except User.DoesNotExist:
-                user = User.objects.create_user(
-                    email=email,
-                    first_name=first_name,
-                    last_name=last_name,
-                    role="PATIENT",
-                    is_active=True,
+                return Response(
+                    {"error": "Account not found. Please register first to use Google Login."},
+                    status=status.HTTP_404_NOT_FOUND,
                 )
 
             if not user.is_active:
