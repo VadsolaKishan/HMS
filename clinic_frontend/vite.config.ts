@@ -21,7 +21,7 @@ export default defineConfig(({ mode }) => ({
     target: 'esnext',
     minify: 'esbuild',
     cssMinify: true,
-    chunkSizeWarningLimit: 1000,
+    chunkSizeWarningLimit: 2000,
     rollupOptions: {
       output: {
         manualChunks(id) {
@@ -32,12 +32,7 @@ export default defineConfig(({ mode }) => ({
             if (id.includes('@radix-ui') || id.includes('lucide-react') || id.includes('class-variance-authority')) {
               return 'vendor-ui';
             }
-            if (id.includes('recharts') || id.includes('d3')) {
-              return 'vendor-charts';
-            }
-            if (id.includes('date-fns') || id.includes('axios')) {
-              return 'vendor-utils';
-            }
+            // Let Rollup handle recharts, d3, and others natively to prevent circular dependency bugs
           }
         }
       }
