@@ -5,10 +5,10 @@ from patients.models import Patient
 
 
 class Command(BaseCommand):
-    help = 'Create patient profiles for all PATIENT users that do not have one'
+    help = "Create patient profiles for all PATIENT users that do not have one"
 
     def handle(self, *args, **options):
-        patient_users = User.objects.filter(role='PATIENT')
+        patient_users = User.objects.filter(role="PATIENT")
         created_count = 0
 
         for user in patient_users:
@@ -16,20 +16,22 @@ class Command(BaseCommand):
                 # Check if patient profile exists
                 user.patient_profile
                 self.stdout.write(
-                    self.style.SUCCESS(f'✓ Patient profile already exists for {user.email}')
+                    self.style.SUCCESS(
+                        f"✓ Patient profile already exists for {user.email}"
+                    )
                 )
             except Patient.DoesNotExist:
                 # Create patient profile with default values
                 patient = Patient.objects.create(
                     user=user,
                     date_of_birth=timezone.now().date(),
-                    gender='M',  # Default, should be updated by user
+                    gender="M",  # Default, should be updated by user
                 )
                 created_count += 1
                 self.stdout.write(
-                    self.style.SUCCESS(f'✓ Created patient profile for {user.email}')
+                    self.style.SUCCESS(f"✓ Created patient profile for {user.email}")
                 )
 
         self.stdout.write(
-            self.style.SUCCESS(f'\n✓ Total profiles created: {created_count}')
+            self.style.SUCCESS(f"\n✓ Total profiles created: {created_count}")
         )

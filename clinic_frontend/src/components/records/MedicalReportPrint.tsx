@@ -48,10 +48,10 @@ export const MedicalReportPrint = () => {
                 <div className="flex items-center gap-4">
                     {/* Logo Placeholder */}
                     <div className="bg-primary text-white h-16 w-16 flex items-center justify-center rounded-lg text-2xl font-bold">
-                        H
+                        V
                     </div>
                     <div>
-                        <h1 className="text-2xl font-bold text-gray-900">HealthCare Pro</h1>
+                        <h1 className="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Velora Care</h1>
                         <p className="text-sm text-gray-500">123 Health Street, Medicity</p>
                         <p className="text-sm text-gray-500">Phone: +1 234 567 890</p>
                     </div>
@@ -84,7 +84,7 @@ export const MedicalReportPrint = () => {
             </div>
 
             {/* Vitals (Static for layout but ready for data) */}
-            <div className="grid grid-cols-4 gap-4 mb-8 text-center py-4 border-y border-gray-100">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8 text-center py-4 border-y border-gray-100">
                 <div>
                     <span className="block text-xs text-gray-400 uppercase">BP</span>
                     <span className="font-medium text-gray-700">--/--</span>

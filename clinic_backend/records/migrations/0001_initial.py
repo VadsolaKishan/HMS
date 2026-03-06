@@ -9,29 +9,58 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('doctors', '0001_initial'),
-        ('appointments', '0001_initial'),
-        ('patients', '0001_initial'),
+        ("doctors", "0001_initial"),
+        ("appointments", "0001_initial"),
+        ("patients", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Prescription',
+            name="Prescription",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('diagnosis', models.TextField()),
-                ('medications', models.TextField()),
-                ('instructions', models.TextField(blank=True, null=True)),
-                ('follow_up_date', models.DateField(blank=True, null=True)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('appointment', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='prescriptions', to='appointments.appointment')),
-                ('doctor', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='prescriptions', to='doctors.doctor')),
-                ('patient', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='prescriptions', to='patients.patient')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("diagnosis", models.TextField()),
+                ("medications", models.TextField()),
+                ("instructions", models.TextField(blank=True, null=True)),
+                ("follow_up_date", models.DateField(blank=True, null=True)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "appointment",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="prescriptions",
+                        to="appointments.appointment",
+                    ),
+                ),
+                (
+                    "doctor",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="prescriptions",
+                        to="doctors.doctor",
+                    ),
+                ),
+                (
+                    "patient",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="prescriptions",
+                        to="patients.patient",
+                    ),
+                ),
             ],
             options={
-                'db_table': 'prescriptions',
-                'ordering': ['-created_at'],
+                "db_table": "prescriptions",
+                "ordering": ["-created_at"],
             },
         ),
     ]

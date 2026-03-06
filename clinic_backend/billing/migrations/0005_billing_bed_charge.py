@@ -6,13 +6,16 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('billing', '0004_billing_discount_amount_billing_discount_percentage_and_more'),
+        (
+            "billing",
+            "0004_billing_discount_amount_billing_discount_percentage_and_more",
+        ),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='billing',
-            name='bed_charge',
+            model_name="billing",
+            name="bed_charge",
             field=models.DecimalField(decimal_places=2, default=0, max_digits=10),
         ),
     ]

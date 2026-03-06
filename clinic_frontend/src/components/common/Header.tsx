@@ -49,8 +49,8 @@ export const Header = ({ title, onMenuClick }: HeaderProps) => {
   };
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border bg-card/80 backdrop-blur-xl px-6">
-      <div className="flex items-center gap-4">
+    <header className="sticky top-0 z-30 flex min-h-16 py-2 items-center justify-between border-b border-border/50 bg-card/80 backdrop-blur-xl px-4 sm:px-6 shadow-sm transition-all duration-300">
+      <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
         <button
           onClick={onMenuClick}
           className="rounded-lg p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground lg:hidden"
@@ -58,16 +58,16 @@ export const Header = ({ title, onMenuClick }: HeaderProps) => {
           <Menu className="h-5 w-5" />
         </button>
         <div>
-          <h1 className="text-xl font-semibold text-foreground">{title}</h1>
+          <h1 className="text-lg sm:text-xl font-semibold text-foreground truncate block w-full">{title}</h1>
           {user && (
-            <p className="text-sm text-muted-foreground">
+            <p className="text-xs sm:text-sm text-muted-foreground truncate block hidden sm:block w-full">
               Welcome back, {user.first_name}!
             </p>
           )}
         </div>
       </div>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
         {/* Search Bar - Desktop */}
         <div className="hidden md:flex items-center relative mr-4">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -96,7 +96,7 @@ export const Header = ({ title, onMenuClick }: HeaderProps) => {
           </button>
 
           {showNotifications && (
-            <div className="absolute right-0 top-full mt-2 w-80 overflow-hidden rounded-2xl border border-border bg-card shadow-xl animate-scale-in">
+            <div className="absolute -right-[3.5rem] sm:right-0 top-full mt-2 w-[calc(100vw-4rem)] sm:w-80 max-w-[22rem] overflow-hidden rounded-2xl border border-border bg-card shadow-xl animate-scale-in z-50">
               <div className="border-b border-border px-4 py-3">
                 <h3 className="font-semibold text-foreground">Notifications</h3>
               </div>
@@ -118,7 +118,7 @@ export const Header = ({ title, onMenuClick }: HeaderProps) => {
                     </div>
                   ))
                 ) : (
-                  <div className="px-4 py-8 text-center text-sm text-muted-foreground">
+                  <div className="px-4 py-8 text-center text-xs sm:text-sm text-muted-foreground truncate w-full">
                     No new notifications
                   </div>
                 )}
@@ -160,12 +160,12 @@ export const Header = ({ title, onMenuClick }: HeaderProps) => {
           </button>
 
           {showUserMenu && (
-            <div className="absolute right-0 top-full mt-2 w-56 overflow-hidden rounded-2xl border border-border bg-card shadow-xl animate-scale-in">
+            <div className="absolute -right-2 sm:right-0 top-full mt-2 w-56 overflow-hidden rounded-2xl border border-border bg-card shadow-xl animate-scale-in z-50">
               <div className="border-b border-border px-4 py-3">
                 <p className="font-medium text-foreground">
                   {user?.first_name} {user?.last_name}
                 </p>
-                <p className="text-sm text-muted-foreground">{user?.email}</p>
+                <p className="text-xs sm:text-sm text-muted-foreground truncate w-full">{user?.email}</p>
               </div>
               <div className="py-2">
                 <button

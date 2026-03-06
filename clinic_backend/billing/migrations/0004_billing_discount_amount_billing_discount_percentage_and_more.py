@@ -6,33 +6,33 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('billing', '0003_remove_billing_balance'),
+        ("billing", "0003_remove_billing_balance"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='billing',
-            name='discount_amount',
+            model_name="billing",
+            name="discount_amount",
             field=models.DecimalField(decimal_places=2, default=0, max_digits=10),
         ),
         migrations.AddField(
-            model_name='billing',
-            name='discount_percentage',
+            model_name="billing",
+            name="discount_percentage",
             field=models.IntegerField(default=0),
         ),
         migrations.AddField(
-            model_name='billing',
-            name='doctor_fee',
+            model_name="billing",
+            name="doctor_fee",
             field=models.DecimalField(decimal_places=2, default=0, max_digits=10),
         ),
         migrations.AddField(
-            model_name='billing',
-            name='final_amount',
+            model_name="billing",
+            name="final_amount",
             field=models.DecimalField(decimal_places=2, default=0, max_digits=10),
         ),
         migrations.AddField(
-            model_name='billing',
-            name='hospital_charge',
+            model_name="billing",
+            name="hospital_charge",
             field=models.DecimalField(decimal_places=2, default=0, max_digits=10),
         ),
     ]

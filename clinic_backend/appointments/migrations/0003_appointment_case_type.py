@@ -6,13 +6,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('appointments', '0002_alter_appointment_status'),
+        ("appointments", "0002_alter_appointment_status"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='appointment',
-            name='case_type',
-            field=models.CharField(choices=[('NEW', 'New'), ('OLD', 'Old')], default='NEW', max_length=3),
+            model_name="appointment",
+            name="case_type",
+            field=models.CharField(
+                choices=[("NEW", "New"), ("OLD", "Old")], default="NEW", max_length=3
+            ),
         ),
     ]

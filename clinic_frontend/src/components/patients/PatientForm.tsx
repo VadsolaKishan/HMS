@@ -234,13 +234,13 @@ export const PatientForm = ({ initialData, onSuccess, onCancel }: PatientFormPro
         </div>
       )}
 
-      <div className="space-y-4 p-5 rounded-2xl border border-border bg-card/50">
+      <div className="space-y-4 p-4 sm:p-5 rounded-2xl border border-border bg-card/50">
         <h3 className="font-semibold flex items-center gap-2">
           <User className="h-4 w-4 text-primary" />
           {initialData ? 'Patient Details' : 'Account Details'}
         </h3>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium mb-1">First Name *</label>
             <input
@@ -271,7 +271,7 @@ export const PatientForm = ({ initialData, onSuccess, onCancel }: PatientFormPro
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium mb-1">Email *</label>
             <input
@@ -304,7 +304,7 @@ export const PatientForm = ({ initialData, onSuccess, onCancel }: PatientFormPro
         </div>
 
         {!initialData && (
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium mb-1">Password *</label>
               <input
@@ -337,7 +337,7 @@ export const PatientForm = ({ initialData, onSuccess, onCancel }: PatientFormPro
         )}
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {/* Date of Birth */}
         <div>
           <label className="block text-sm font-medium text-foreground mb-2">
@@ -361,7 +361,7 @@ export const PatientForm = ({ initialData, onSuccess, onCancel }: PatientFormPro
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {/* Gender */}
         <div>
           <label className="block text-sm font-medium text-foreground mb-2">
@@ -490,18 +490,18 @@ export const PatientForm = ({ initialData, onSuccess, onCancel }: PatientFormPro
       </div>
 
       {/* Actions */}
-      <div className="flex justify-end gap-4 pt-4">
+      <div className="flex justify-center sm:justify-end gap-3 sm:gap-4 pt-4">
         <button
           type="button"
           onClick={onCancel}
-          className="rounded-xl px-6 py-3 font-medium text-muted-foreground hover:bg-muted transition-colors"
+          className="flex-1 sm:flex-none rounded-xl px-6 py-3 font-medium text-muted-foreground hover:bg-muted transition-colors text-center"
         >
           Cancel
         </button>
         <button
           type="submit"
           disabled={isSubmitting}
-          className="btn-gradient flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex-1 sm:flex-none btn-gradient flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isSubmitting ? <ButtonLoader /> : (initialData ? 'Save Changes' : 'Add Patient')}
         </button>

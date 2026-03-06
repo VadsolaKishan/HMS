@@ -29,16 +29,17 @@ export const Modal = ({ isOpen, onClose, title, children, size = 'md' }: ModalPr
       />
 
       {/* Modal */}
-      <div
-        className={cn(
-          'relative z-10 w-full mx-4 max-h-[90vh] overflow-auto',
-          'bg-card rounded-2xl shadow-2xl animate-scale-in',
-          sizeClasses[size]
-        )}
-      >
+      <div className="absolute inset-4 flex items-center justify-center pointer-events-none">
+        <div
+          className={cn(
+            'relative z-10 w-full max-h-full overflow-auto pointer-events-auto',
+            'bg-card rounded-2xl shadow-2xl animate-scale-in',
+            sizeClasses[size]
+          )}
+        >
         {/* Header */}
         {title && (
-          <div className="flex items-center justify-between border-b border-border px-6 py-4">
+          <div className="flex items-center justify-between border-b border-border px-4 py-4 sm:px-6">
             <h2 className="text-xl font-semibold text-foreground">{title}</h2>
             <button
               onClick={onClose}
@@ -50,7 +51,8 @@ export const Modal = ({ isOpen, onClose, title, children, size = 'md' }: ModalPr
         )}
 
         {/* Content */}
-        <div className="p-6">{children}</div>
+        <div className="p-4 sm:p-6">{children}</div>
+        </div>
       </div>
     </div>
   );

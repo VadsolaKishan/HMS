@@ -93,7 +93,7 @@ export const BedRequestList = () => {
     return (
         <div className="space-y-6">
             {/* Active Requests */}
-            <div className="bg-white border rounded-xl overflow-hidden shadow-sm">
+            <div className="bg-white border rounded-xl overflow-hidden shadow-sm overflow-x-auto">
                 <div className="px-6 py-4 border-b flex justify-between items-center bg-blue-50/50">
                     <h2 className="font-semibold text-lg">Pending Bed Requests</h2>
                     <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs font-medium">
@@ -163,7 +163,7 @@ export const BedRequestList = () => {
 
             {/* History - Collapsible or separate table */}
             {historyRequests.length > 0 && (
-                <div className="bg-white border rounded-xl overflow-hidden shadow-sm opacity-75">
+                <div className="bg-white border rounded-xl overflow-hidden shadow-sm overflow-x-auto opacity-75">
                     <div className="px-6 py-4 border-b bg-slate-50">
                         <h2 className="font-semibold text-md text-slate-600">Request History</h2>
                     </div>

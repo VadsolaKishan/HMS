@@ -41,13 +41,13 @@ export const BedDashboard = () => {
     }
 
     return (
-        <div className="space-y-6 p-6 animate-fade-in">
+        <div className="space-y-4 sm:space-y-6 animate-fade-in w-full">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                     <h1 className="text-2xl font-bold tracking-tight">Bed Management</h1>
-                    <p className="text-muted-foreground">Manage hospital wards, beds, and patient allocations.</p>
+                    <p className="text-muted-foreground text-sm sm:text-base mt-1">Manage hospital wards, beds, and patient allocations.</p>
                 </div>
-                <div className="flex items-center gap-2 bg-secondary/50 p-1 rounded-lg">
+                <div className="flex items-center gap-1 sm:gap-2 bg-secondary/50 p-1 rounded-lg overflow-x-auto max-w-full no-scrollbar whitespace-nowrap">
                     <button
                         onClick={() => setActiveTab('overview')}
                         className={`px-3 py-1.5 text-sm font-medium rounded-md transition-all ${activeTab === 'overview' ? 'bg-white shadow-sm text-primary' : 'text-muted-foreground hover:text-foreground'}`}
@@ -129,7 +129,7 @@ export const BedDashboard = () => {
                             <h2 className="text-lg font-semibold">Ward Status</h2>
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                 {wards?.map((ward: Ward) => (
-                                    <div key={ward.id} className="bg-white border rounded-xl overflow-hidden shadow-sm flex flex-col">
+                                    <div key={ward.id} className="bg-white border rounded-xl overflow-hidden shadow-sm overflow-x-auto flex flex-col">
                                         <div className="p-4 border-b bg-slate-50/50">
                                             <div className="flex justify-between items-center">
                                                 <h3 className="font-semibold text-lg">{ward.name}</h3>

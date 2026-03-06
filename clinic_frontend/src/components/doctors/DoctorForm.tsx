@@ -157,8 +157,8 @@ export const DoctorForm = ({ departments, onSuccess, onCancel }: DoctorFormProps
       {step === 1 && (
         <div className="space-y-4 animate-fade-in">
            <h3 className="text-lg font-medium text-foreground">Step 1: Personal Details</h3>
-           <div className="grid grid-cols-2 gap-4">
-              <div className="col-span-1">
+           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="sm:col-span-1">
                 <label className="block text-sm font-medium text-foreground mb-2">First Name</label>
                 <input
                   type="text"
@@ -168,7 +168,7 @@ export const DoctorForm = ({ departments, onSuccess, onCancel }: DoctorFormProps
                 />
                 {errors.first_name && <p className="mt-1 text-xs text-destructive">{errors.first_name}</p>}
               </div>
-              <div className="col-span-1">
+              <div className="sm:col-span-1">
                 <label className="block text-sm font-medium text-foreground mb-2">Last Name</label>
                 <input
                   type="text"
@@ -179,7 +179,7 @@ export const DoctorForm = ({ departments, onSuccess, onCancel }: DoctorFormProps
                 {errors.last_name && <p className="mt-1 text-xs text-destructive">{errors.last_name}</p>}
               </div>
 
-              <div className="col-span-2">
+              <div className="sm:col-span-2">
                 <label className="block text-sm font-medium text-foreground mb-2">Email (Username)</label>
                 <input
                   type="email"
@@ -191,7 +191,7 @@ export const DoctorForm = ({ departments, onSuccess, onCancel }: DoctorFormProps
                 {errors.email && <p className="mt-1 text-xs text-destructive">{errors.email}</p>}
               </div>
               
-              <div className="col-span-2">
+              <div className="sm:col-span-2">
                 <label className="block text-sm font-medium text-foreground mb-2">Phone</label>
                 <input
                   type="tel"
@@ -202,7 +202,7 @@ export const DoctorForm = ({ departments, onSuccess, onCancel }: DoctorFormProps
                 {errors.phone && <p className="mt-1 text-xs text-destructive">{errors.phone}</p>}
               </div>
 
-               <div className="col-span-1">
+               <div className="sm:col-span-1">
                 <label className="block text-sm font-medium text-foreground mb-2">Password</label>
                 <input
                   type="password"
@@ -213,7 +213,7 @@ export const DoctorForm = ({ departments, onSuccess, onCancel }: DoctorFormProps
                 />
                 {errors.password && <p className="mt-1 text-xs text-destructive">{errors.password}</p>}
               </div>
-              <div className="col-span-1">
+              <div className="sm:col-span-1">
                 <label className="block text-sm font-medium text-foreground mb-2">Confirm Password</label>
                 <input
                   type="password"
@@ -225,18 +225,18 @@ export const DoctorForm = ({ departments, onSuccess, onCancel }: DoctorFormProps
               </div>
            </div>
            
-           <div className="flex justify-end gap-3 pt-4">
+           <div className="flex sm:justify-end gap-3 pt-4">
               <button
                 type="button"
                 onClick={onCancel}
-                className="px-4 py-2 text-sm font-medium text-muted-foreground hover:bg-muted rounded-lg"
+                className="flex-1 sm:flex-none px-4 py-2 text-sm font-medium text-muted-foreground hover:bg-muted rounded-lg text-center"
               >
                 Cancel
               </button>
               <button
                 type="button"
                 onClick={handleNext}
-                className="btn-gradient px-6 py-2 flex items-center gap-2"
+                className="flex-1 sm:flex-none btn-gradient px-6 py-2 flex items-center justify-center gap-2"
               >
                 Next Step <ArrowRight className="w-4 h-4" />
               </button>
@@ -247,9 +247,9 @@ export const DoctorForm = ({ departments, onSuccess, onCancel }: DoctorFormProps
       {step === 2 && (
         <div className="space-y-4 animate-fade-in">
            <h3 className="text-lg font-medium text-foreground">Step 2: Professional Details</h3>
-           <div className="grid grid-cols-2 gap-4">
+           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {/* Department */}
-            <div className="col-span-2">
+            <div className="sm:col-span-2">
             <label className="block text-sm font-medium text-foreground mb-2">
               Department
             </label>
@@ -305,7 +305,7 @@ export const DoctorForm = ({ departments, onSuccess, onCancel }: DoctorFormProps
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {/* Experience */}
             <div>
             <label className="block text-sm font-medium text-foreground mb-2">
@@ -375,26 +375,26 @@ export const DoctorForm = ({ departments, onSuccess, onCancel }: DoctorFormProps
           </div>
 
           {/* Actions */}
-          <div className="flex justify-between gap-4 pt-4">
+          <div className="flex flex-col sm:flex-row sm:justify-between gap-3 sm:gap-4 pt-4">
             <button
               type="button"
               onClick={handleBack}
-              className="px-4 py-2 text-sm font-medium text-muted-foreground hover:bg-muted rounded-lg flex items-center gap-1"
+              className="flex items-center justify-center gap-1 px-4 py-2 text-sm font-medium text-muted-foreground hover:bg-muted rounded-lg w-full sm:w-auto order-last sm:order-first"
             >
               <ArrowLeft className="w-4 h-4" /> Back
             </button>
-            <div className="flex gap-2">
+            <div className="flex gap-3 w-full sm:w-auto">
               <button
                 type="button"
                 onClick={onCancel}
-                className="px-4 py-2 text-sm font-medium text-muted-foreground hover:bg-muted rounded-lg"
+                className="flex-1 sm:flex-none px-4 py-2 text-sm font-medium text-muted-foreground hover:bg-muted rounded-lg text-center"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="btn-gradient px-6 py-2 flex items-center gap-2 disabled:opacity-50"
+                className="flex-1 sm:flex-none btn-gradient px-6 py-2 flex items-center justify-center gap-2 disabled:opacity-50"
               >
                 {isSubmitting ? <ButtonLoader /> : 'Create Account'}
               </button>

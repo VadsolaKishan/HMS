@@ -162,7 +162,7 @@ export const WardList = () => {
                 </div>
             )}
 
-            <div className="bg-white border rounded-xl overflow-hidden shadow-sm">
+            <div className="bg-white border rounded-xl overflow-hidden shadow-sm overflow-x-auto">
                 <table className="w-full text-left">
                     <thead className="bg-slate-50 border-b">
                         <tr>

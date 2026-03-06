@@ -51,33 +51,36 @@ export const StatCard = ({ title, value, icon: Icon, trend, variant = 'blue' }: 
   return (
     <div
       className={cn(
-        'group relative overflow-hidden rounded-xl bg-card p-6 shadow-sm transition-all duration-300 hover:shadow-md hover:-translate-y-1 border border-border',
+        'group relative overflow-hidden rounded-2xl bg-card p-6 shadow-sm transition-all duration-500 hover:shadow-lg hover:-translate-y-1.5 hover:shadow-primary/10 border border-border/60 hover:border-primary/30 z-10',
         styles.border
       )}
     >
-      <div className="flex items-start justify-between">
+      {/* Background Gradient Effect */}
+      <div className="absolute inset-0 bg-gradient-to-br from-transparent to-black/5 dark:to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
+
+      <div className="flex justify-between items-start">
         <div>
-          <p className="text-sm font-medium text-muted-foreground">{title}</p>
-          <div className="mt-2 flex items-baseline gap-2">
+          <p className="text-sm font-medium text-muted-foreground group-hover:text-foreground/80 transition-colors">{title}</p>
+          <div className="mt-4 flex items-baseline gap-2">
             <span className="text-3xl font-bold text-foreground tracking-tight">{value}</span>
           </div>
           {trend && (
-            <div className="mt-2 flex items-center gap-1.5">
+            <div className="mt-3 flex items-center gap-2">
               <span
                 className={cn(
-                  'flex items-center text-xs font-medium px-1.5 py-0.5 rounded-full bg-opacity-10',
+                  'flex items-center text-xs font-semibold px-2 py-1 rounded-full shadow-sm',
                   trend.isPositive
-                    ? 'text-emerald-600 bg-emerald-100'
-                    : 'text-rose-600 bg-rose-100'
+                    ? 'text-emerald-700 bg-emerald-100/80 border border-emerald-200'
+                    : 'text-rose-700 bg-rose-100/80 border border-rose-200'
                 )}
               >
                 {trend.isPositive ? '↑' : '↓'} {Math.abs(trend.value)}%
               </span>
-              <span className="text-xs text-muted-foreground">vs last month</span>
+              <span className="text-xs text-muted-foreground font-medium">vs last month</span>
             </div>
           )}
         </div>
-        <div className={cn('rounded-xl p-3 transition-colors group-hover:scale-110 duration-300', styles.iconBg)}>
+        <div className={cn('rounded-2xl p-3.5 transition-all duration-500 group-hover:scale-110 group-hover:rotate-3 shadow-sm', styles.iconBg)}>
           <Icon className="h-6 w-6" />
         </div>
       </div>

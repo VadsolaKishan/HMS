@@ -121,7 +121,7 @@ export const Sidebar = ({ isOpen, onToggle, isMobile = false }: SidebarProps) =>
             </div>
             {isOpen && (
               <div className="animate-fade-in">
-                <h1 className="text-lg font-bold gradient-text">HealthCare Pro</h1>
+                <h1 className="text-xl font-extrabold tracking-tight bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Velora Care</h1>
                 <p className="text-xs text-muted-foreground">Management System</p>
               </div>
             )}
@@ -138,13 +138,20 @@ export const Sidebar = ({ isOpen, onToggle, isMobile = false }: SidebarProps) =>
                   <NavLink
                     to={item.path}
                     className={({ isActive }) => cn(
-                      'nav-link group relative overflow-hidden',
-                      isActive && 'active'
+                      'group relative overflow-hidden flex items-center gap-3 px-4 py-3 rounded-xl text-muted-foreground font-medium transition-all duration-300 hover:bg-muted/50 hover:text-foreground',
+                      isActive && 'bg-primary/10 text-primary font-semibold shadow-sm hover:bg-primary/15'
                     )}
                   >
-                    <item.icon className={cn('h-5 w-5 flex-shrink-0', isActive && 'text-primary')} />
-                    {isOpen && (
-                      <span className="animate-fade-in">{item.title}</span>
+                    {({ isActive }) => (
+                      <>
+                        {isActive && (
+                          <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-8 bg-primary rounded-r-full shadow-[0_0_8px_rgba(30,58,138,0.5)]" />
+                        )}
+                        <item.icon className={cn('h-5 w-5 flex-shrink-0 transition-transform duration-300 group-hover:scale-110', isActive && 'text-primary scale-110')} />
+                        {isOpen && (
+                          <span className="animate-fade-in">{item.title}</span>
+                        )}
+                      </>
                     )}
                   </NavLink>
                 </li>

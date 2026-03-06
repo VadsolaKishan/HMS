@@ -9,7 +9,7 @@ def create_patient_profile(sender, instance, created, **kwargs):
     """
     Automatically create a Patient profile when a User with role PATIENT is created
     """
-    if created and instance.role == 'PATIENT':
+    if created and instance.role == "PATIENT":
         from patients.models import Patient
 
         # Only create if patient profile doesn't already exist
@@ -17,7 +17,7 @@ def create_patient_profile(sender, instance, created, **kwargs):
             Patient.objects.create(
                 user=instance,
                 date_of_birth=timezone.now().date(),
-                gender='M',
+                gender="M",
             )
 
 

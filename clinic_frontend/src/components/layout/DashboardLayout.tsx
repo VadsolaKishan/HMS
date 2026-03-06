@@ -15,9 +15,10 @@ export const DashboardLayout = ({ title }: DashboardLayoutProps) => {
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
       {/* Background Orbs */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
-        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-secondary/10 rounded-full blur-[120px] translate-y-1/2 -translate-x-1/2" />
+      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-0 right-0 w-[400px] sm:w-[500px] h-[400px] sm:h-[500px] bg-primary/15 rounded-full blur-[100px] sm:blur-[120px] -translate-y-1/2 translate-x-1/2 animate-pulse-slow" />
+        <div className="absolute bottom-0 left-0 w-[400px] sm:w-[500px] h-[400px] sm:h-[500px] bg-secondary/15 rounded-full blur-[100px] sm:blur-[120px] translate-y-1/2 -translate-x-1/2 animate-pulse-slow" style={{ animationDelay: '4s' }} />
+        <div className="absolute top-1/2 left-1/4 w-[300px] h-[300px] bg-accent/10 rounded-full blur-[80px] -translate-y-1/2 animate-pulse-slow" style={{ animationDelay: '2s' }} />
       </div>
 
       {/* Desktop Sidebar */}
@@ -45,7 +46,7 @@ export const DashboardLayout = ({ title }: DashboardLayoutProps) => {
           title={title}
           onMenuClick={() => setMobileSidebarOpen(!mobileSidebarOpen)}
         />
-        <main className="p-6">
+        <main className="p-4 sm:p-6 flex-1 overflow-x-hidden">
           <Outlet />
         </main>
       </div>
