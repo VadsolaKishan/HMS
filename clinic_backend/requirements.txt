@@ -13,7 +13,7 @@ gunicorn==22.0.0
 idna==3.11
 mysqlclient==2.2.0
 packaging==26.0
-psycopg-binary
+psycopg2-binary==2.9.9
 pyasn1==0.6.2
 pyasn1_modules==0.4.2
 pycparser==3.0
