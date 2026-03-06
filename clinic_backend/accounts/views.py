@@ -178,6 +178,18 @@ class UserViewSet(viewsets.ModelViewSet):
             email = idinfo.get("email")
             first_name = idinfo.get("given_name", "")
             last_name = idinfo.get("family_name", "")
+            
+            # Fallback if Google only provides 'name'
+            if not first_name and "name" in idinfo:
+                name_parts = idinfo["name"].split(" ", 1)
+                first_name = name_parts[0]
+                if len(name_parts) > 1:
+                    last_name = name_parts[1]
+                    
+            # Ultimate fallback if no name is provided
+            if not first_name:
+                first_name = email.split("@")[0]
+                last_name = ""
 
             if not email:
                 return Response(
@@ -189,15 +201,13 @@ class UserViewSet(viewsets.ModelViewSet):
             try:
                 user = User.objects.get(email=email)
             except User.DoesNotExist:
-                user = User(
+                user = User.objects.create_user(
                     email=email,
                     first_name=first_name,
                     last_name=last_name,
-                    role="PATIENT",  # Default role for self-registered user via Google
+                    role="PATIENT",
                     is_active=True,
                 )
-                user.set_unusable_password()
-                user.save()
 
             if not user.is_active:
                 return Response(
