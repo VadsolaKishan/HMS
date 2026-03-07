@@ -70,7 +70,7 @@ export const Header = ({ title, onMenuClick }: HeaderProps) => {
       <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
         {/* Search Bar - Desktop */}
         <div className="hidden md:flex items-center relative mr-4">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground z-10 pointer-events-none" />
           <input
             type="text"
             placeholder="Search patients, doctors..."

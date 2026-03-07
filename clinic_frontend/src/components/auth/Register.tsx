@@ -189,7 +189,7 @@ export const Register = () => {
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground ml-1">First Name</label>
                   <div className="relative group">
-                    <User className="absolute left-3 top-3.5 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                    <User className="absolute left-3 top-3.5 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors z-10 pointer-events-none" />
                     <input
                       type="text"
                       value={formData.first_name}
@@ -216,7 +216,7 @@ export const Register = () => {
               <div className="space-y-1.5">
                 <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground ml-1">Email</label>
                 <div className="relative group">
-                  <Mail className="absolute left-3 top-3.5 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                  <Mail className="absolute left-3 top-3.5 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors z-10 pointer-events-none" />
                   <input
                     type="email"
                     value={formData.email}
@@ -231,7 +231,7 @@ export const Register = () => {
               <div className="space-y-1.5">
                 <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground ml-1">Phone</label>
                 <div className="relative group">
-                  <Phone className="absolute left-3 top-3.5 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                  <Phone className="absolute left-3 top-3.5 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors z-10 pointer-events-none" />
                   <input
                     type="tel"
                     value={formData.phone}
@@ -256,7 +256,7 @@ export const Register = () => {
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground ml-1">Password</label>
                   <div className="relative group">
-                    <Lock className="absolute left-3 top-3.5 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                    <Lock className="absolute left-3 top-3.5 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors z-10 pointer-events-none" />
                     <input
                       type={showPassword ? 'text' : 'password'}
                       value={formData.password}
@@ -264,7 +264,7 @@ export const Register = () => {
                       className="w-full bg-background border border-input rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder-muted-foreground pl-10 pr-10 py-2.5 sm:py-3 outline-none text-sm font-medium transition-all shadow-sm"
                       placeholder="••••••••"
                     />
-                    <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-3.5 text-muted-foreground hover:text-primary transition-colors">
+                    <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-3.5 text-muted-foreground hover:text-primary transition-colors z-10">
                       {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
                   </div>
@@ -273,7 +273,7 @@ export const Register = () => {
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground ml-1">Confirm</label>
                   <div className="relative group">
-                    <Lock className="absolute left-3 top-3.5 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                    <Lock className="absolute left-3 top-3.5 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors z-10 pointer-events-none" />
                     <input
                       type={showConfirmPassword ? 'text' : 'password'}
                       value={formData.confirm_password}
@@ -281,7 +281,7 @@ export const Register = () => {
                       className="w-full bg-background border border-input rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder-muted-foreground pl-10 pr-10 py-2.5 sm:py-3 outline-none text-sm font-medium transition-all shadow-sm"
                       placeholder="••••••••"
                     />
-                    <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="absolute right-3 top-3.5 text-muted-foreground hover:text-primary transition-colors">
+                    <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="absolute right-3 top-3.5 text-muted-foreground hover:text-primary transition-colors z-10">
                       {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
                   </div>
@@ -358,3 +358,5 @@ export const Register = () => {
     </div>
   );
 };
+
+

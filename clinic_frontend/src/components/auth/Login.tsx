@@ -204,7 +204,7 @@ export const Login = () => {
                             <div className="space-y-1.5">
                                 <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground ml-1">Email</label>
                                 <div className="relative group">
-                                    <Mail className="absolute left-3 top-3.5 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                                    <Mail className="absolute left-3 top-3.5 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors z-10 pointer-events-none" />
                                     <input
                                         type="email"
                                         value={formData.email}
@@ -219,7 +219,7 @@ export const Login = () => {
                             <div className="space-y-1.5">
                                 <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground ml-1">Password</label>
                                 <div className="relative group">
-                                    <Lock className="absolute left-3 top-3.5 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                                    <Lock className="absolute left-3 top-3.5 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors z-10 pointer-events-none" />
                                     <input
                                         type={showPassword ? 'text' : 'password'}
                                         value={formData.password}
@@ -230,7 +230,7 @@ export const Login = () => {
                                     <button
                                         type="button"
                                         onClick={() => setShowPassword(!showPassword)}
-                                        className="absolute right-3 top-3.5 text-muted-foreground hover:text-primary transition-colors"
+                                        className="absolute right-3 top-3.5 text-muted-foreground hover:text-primary transition-colors z-10"
                                     >
                                         {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                                     </button>
