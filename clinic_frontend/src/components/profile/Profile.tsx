@@ -6,6 +6,7 @@ import { authService } from '@/services/authService';
 import { patientService, Patient } from '@/services/patientService';
 import { useToast } from '@/hooks/use-toast';
 import { formatDate } from '@/utils/helpers';
+import { PageLoader } from '@/components/common/Loader';
 
 export const Profile = () => {
     const { user, refreshUser } = useAuth();
@@ -51,7 +52,7 @@ export const Profile = () => {
     }, [user]);
 
     if (!user) {
-        return <div className="p-8 text-center text-muted-foreground">Loading profile...</div>;
+        return <PageLoader />;
     }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {

@@ -12,7 +12,7 @@ export const PrivateRoute = ({ children, allowedRoles }: PrivateRouteProps) => {
   const location = useLocation();
 
   if (isLoading) {
-    return <PageLoader />;
+    return <PageLoader variant="screen" />;
   }
 
   if (!isAuthenticated) {

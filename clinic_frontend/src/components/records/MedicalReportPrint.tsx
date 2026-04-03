@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { recordService, Prescription } from '@/services/recordService';
 import { formatDate } from '@/utils/helpers';
-import { Loader2 } from 'lucide-react';
+import { PageLoader } from '@/components/common/Loader';
 
 export const MedicalReportPrint = () => {
     const { id } = useParams();
@@ -29,11 +29,7 @@ export const MedicalReportPrint = () => {
         fetchReport();
     }, [id]);
 
-    if (loading) return (
-        <div className="flex h-screen w-full items-center justify-center">
-            <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        </div>
-    );
+    if (loading) return <PageLoader variant="screen" />;
 
     if (error || !report) return (
         <div className="flex h-screen w-full items-center justify-center text-destructive">

@@ -1,5 +1,28 @@
 import axios from 'axios';
 
+type GetCacheEntry = {
+  timestamp: number;
+  data: unknown;
+};
+
+const GET_CACHE_TTL_MS = 60 * 1000;
+const getResponseCache = new Map<string, GetCacheEntry>();
+
+const cleanupExpiredGetCache = () => {
+  const now = Date.now();
+  for (const [key, entry] of getResponseCache.entries()) {
+    if (now - entry.timestamp > GET_CACHE_TTL_MS) {
+      getResponseCache.delete(key);
+    }
+  }
+};
+
+const buildCacheKey = (config: { url?: string; params?: unknown }) => {
+  const tokenKey = localStorage.getItem('access_token') || 'guest';
+  const paramsKey = config.params ? JSON.stringify(config.params) : '';
+  return `${tokenKey}:${config.url || ''}:${paramsKey}`;
+};
+
 // Get the API base URL based on the current hostname
 // If on localhost, use localhost:8000
 // If on an IP address, use the same IP with :8000
@@ -33,6 +56,31 @@ api.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+
+    const method = (config.method || 'get').toLowerCase();
+
+    if (method === 'get') {
+      cleanupExpiredGetCache();
+      const cacheKey = buildCacheKey(config);
+      const cached = getResponseCache.get(cacheKey);
+
+      if (cached) {
+        config.adapter = async () => ({
+          data: cached.data,
+          status: 200,
+          statusText: 'OK',
+          headers: {},
+          config,
+          request: {},
+        });
+      }
+
+      (config as any)._cacheKey = cacheKey;
+    } else if (method === 'post' || method === 'put' || method === 'patch' || method === 'delete') {
+      // Mutations may affect any list/detail response; clear cached GET data.
+      getResponseCache.clear();
+    }
+
     return config;
   },
   (error) => {
@@ -42,7 +90,19 @@ api.interceptors.request.use(
 
 // Response interceptor for error handling
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    const method = (response.config.method || 'get').toLowerCase();
+
+    if (method === 'get') {
+      const cacheKey = (response.config as any)._cacheKey || buildCacheKey(response.config);
+      getResponseCache.set(cacheKey, {
+        timestamp: Date.now(),
+        data: response.data,
+      });
+    }
+
+    return response;
+  },
   async (error) => {
     const originalRequest = error.config;
 

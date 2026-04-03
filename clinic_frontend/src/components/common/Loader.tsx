@@ -44,8 +44,22 @@ export const ButtonLoader = ({ className }: { className?: string }) => (
   <Loader2 className={cn("h-4 w-4 animate-spin", className)} />
 );
 
-export const PageLoader = () => (
-  <div className="flex min-h-screen w-full items-center justify-center bg-background">
-    <Loader size="lg" text="Loading..." />
+type PageLoaderVariant = 'content' | 'screen' | 'inline';
+
+interface PageLoaderProps {
+  variant?: PageLoaderVariant;
+  text?: string;
+  className?: string;
+}
+
+const pageLoaderVariantClasses: Record<PageLoaderVariant, string> = {
+  content: 'grid h-full min-h-[calc(100dvh-8rem)] w-full place-items-center',
+  screen: 'flex min-h-screen w-full items-center justify-center bg-background',
+  inline: 'grid min-h-[16rem] w-full place-items-center',
+};
+
+export const PageLoader = ({ variant = 'content', text = 'Loading...', className }: PageLoaderProps) => (
+  <div className={cn(pageLoaderVariantClasses[variant], className)}>
+    <Loader size="lg" text={text} />
   </div>
 );

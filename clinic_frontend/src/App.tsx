@@ -35,11 +35,22 @@ import { SupportList } from "@/components/support/SupportList";
 import { LabRequestList } from "@/components/laboratory/LabRequestList";
 import { LabTestTypeList } from "@/components/laboratory/LabTestTypeList";
 import { MyLabReports } from "@/components/laboratory/MyLabReports";
+import { PageLoader } from "@/components/common/Loader";
 import NotFound from "./pages/NotFound";
 import { doctorService } from "@/services/doctorService";
 import { patientService } from "@/services/patientService";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000,
+      gcTime: 15 * 60 * 1000,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      retry: 1,
+    },
+  },
+});
 
 // Component wrapper for appointment form with modal behavior
 const AppointmentFormWrapper = () => {
@@ -103,7 +114,7 @@ const PatientEditWrapper = () => {
     fetchPatient();
   }, [id, navigate]);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <PageLoader />;
 
   return (
     <div className="space-y-6">
@@ -141,7 +152,7 @@ const DoctorFormWrapper = () => {
     fetchDepts();
   }, []);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <PageLoader />;
 
   return (
     <div className="space-y-6">

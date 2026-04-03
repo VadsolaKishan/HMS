@@ -56,9 +56,7 @@ export const PatientHistoryModal: React.FC<PatientHistoryModalProps> = ({ isOpen
         >
             <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
                 {isLoading ? (
-                    <div className="flex justify-center p-8">
-                        <PageLoader />
-                    </div>
+                    <PageLoader variant="inline" className="py-8" />
                 ) : history.length === 0 ? (
                     <div className="text-center py-8 text-muted-foreground">
                         No history found for this patient.

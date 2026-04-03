@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { billingService, Bill } from '@/services/billingService';
 import { formatDate, formatCurrency } from '@/utils/helpers';
-import { Loader2 } from 'lucide-react';
+import { PageLoader } from '@/components/common/Loader';
 
 export const InvoicePrint = () => {
     const { id } = useParams();
@@ -31,11 +31,7 @@ export const InvoicePrint = () => {
         fetchBill();
     }, [id]);
 
-    if (loading) return (
-        <div className="flex h-screen w-full items-center justify-center">
-            <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        </div>
-    );
+    if (loading) return <PageLoader variant="screen" />;
 
     if (error || !bill) return (
         <div className="flex h-screen w-full items-center justify-center text-destructive">

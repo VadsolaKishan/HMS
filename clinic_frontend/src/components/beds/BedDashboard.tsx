@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { bedService, Ward, Bed } from '@/services/bedService';
 import { Plus, Users, BedDouble, Activity, CheckCircle, AlertCircle, LayoutGrid, List } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
-import { ButtonLoader } from '@/components/common/Loader';
+import { PageLoader } from '@/components/common/Loader';
 import { WardList } from './WardList';
 import { BedList } from './BedList';
 import { BedRequestList } from './BedRequestList';
@@ -37,7 +37,7 @@ export const BedDashboard = () => {
     const occupancyRate = totalBeds > 0 ? Math.round((occupiedBeds / totalBeds) * 100) : 0;
 
     if (wardsLoading || bedsLoading) {
-        return <div className="flex justify-center p-8"><ButtonLoader className="text-primary" /></div>;
+        return <PageLoader />;
     }
 
     return (
