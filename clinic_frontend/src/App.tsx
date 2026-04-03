@@ -40,17 +40,7 @@ import NotFound from "./pages/NotFound";
 import { doctorService } from "@/services/doctorService";
 import { patientService } from "@/services/patientService";
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 5 * 60 * 1000,
-      gcTime: 15 * 60 * 1000,
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-      retry: 1,
-    },
-  },
-});
+const queryClient = new QueryClient();
 
 // Component wrapper for appointment form with modal behavior
 const AppointmentFormWrapper = () => {

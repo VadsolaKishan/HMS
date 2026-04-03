@@ -11,14 +11,18 @@ import { BedRequestList } from './BedRequestList';
 export const BedDashboard = () => {
     const [activeTab, setActiveTab] = useState<'overview' | 'wards' | 'beds' | 'requests'>('overview');
 
-    const { data: wards, isLoading: wardsLoading } = useQuery({
+    const { data: wards, isLoading: wardsLoading, isFetching: wardsFetching } = useQuery({
         queryKey: ['wards'],
         queryFn: bedService.getWards,
+        staleTime: 0,
+        refetchOnMount: 'always',
     });
 
-    const { data: beds, isLoading: bedsLoading } = useQuery({
+    const { data: beds, isLoading: bedsLoading, isFetching: bedsFetching } = useQuery({
         queryKey: ['beds'],
         queryFn: () => bedService.getBeds(),
+        staleTime: 0,
+        refetchOnMount: 'always',
     });
 
     const { data: requests } = useQuery({
@@ -36,7 +40,7 @@ export const BedDashboard = () => {
 
     const occupancyRate = totalBeds > 0 ? Math.round((occupiedBeds / totalBeds) * 100) : 0;
 
-    if (wardsLoading || bedsLoading) {
+    if (wardsLoading || bedsLoading || wardsFetching || bedsFetching) {
         return <PageLoader />;
     }
 
