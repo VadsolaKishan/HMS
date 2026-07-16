@@ -45,6 +45,7 @@ class AppointmentSerializer(serializers.ModelSerializer):
             "appointment_time",
             "reason",
             "status",
+            "case_type",
             "notes",
             "patient_details",
             "doctor_details",
@@ -73,6 +74,47 @@ class AppointmentSerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
         ]
+
+    def validate(self, attrs):
+        """
+        Application-level duplicate-slot check.
+
+        The database UniqueConstraint is the final authority, but this
+        validation gives the user a cleaner error before we even attempt
+        the INSERT.
+        """
+        doctor = attrs.get("doctor", getattr(self.instance, "doctor", None))
+        date = attrs.get(
+            "appointment_date",
+            getattr(self.instance, "appointment_date", None),
+        )
+        time = attrs.get(
+            "appointment_time",
+            getattr(self.instance, "appointment_time", None),
+        )
+
+        if doctor and date and time:
+            conflict_qs = Appointment.objects.filter(
+                doctor=doctor,
+                appointment_date=date,
+                appointment_time=time,
+                status__in=Appointment.ACTIVE_STATUSES,
+            )
+            # On update, exclude the current instance from the check
+            if self.instance:
+                conflict_qs = conflict_qs.exclude(pk=self.instance.pk)
+
+            if conflict_qs.exists():
+                raise serializers.ValidationError(
+                    {
+                        "appointment_time": (
+                            "This doctor already has an active appointment "
+                            "at this date and time."
+                        )
+                    }
+                )
+
+        return attrs
 
     def get_has_billing(self, obj):
         """Check if appointment has associated billing"""
