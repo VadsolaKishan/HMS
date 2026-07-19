@@ -54,6 +54,13 @@ class PatientViewSet(viewsets.ModelViewSet):
                 {"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
+    def perform_destroy(self, instance):
+        user = instance.user
+        if user:
+            user.delete()
+        else:
+            instance.delete()
+
     def get_queryset(self):
         """
         Queryset filtering — the first line of defence.

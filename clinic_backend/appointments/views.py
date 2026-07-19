@@ -69,6 +69,8 @@ class AppointmentViewSet(viewsets.ModelViewSet):
         - If user is ADMIN/STAFF, they can specify the patient
         - DOCTOR role is rejected (doctors receive appointments, not create)
         """
+        from django.db import transaction, IntegrityError
+
         user = self.request.user
 
         if user.role == "DOCTOR":
@@ -76,66 +78,81 @@ class AppointmentViewSet(viewsets.ModelViewSet):
                 {"error": "Doctors cannot create appointments."}
             )
 
-        if user.role == "PATIENT":
-            # Ensure the patient exists for this user
-            try:
-                from patients.models import Patient
+        try:
+            with transaction.atomic():
+                if user.role == "PATIENT":
+                    # Ensure the patient exists for this user
+                    try:
+                        from patients.models import Patient
 
-                patient = Patient.objects.get(user=user)
-                appointment = serializer.save(patient=patient)
+                        patient = Patient.objects.get(user=user)
+                        appointment = serializer.save(patient=patient)
 
-                # Notify Admins of new appointment
-                admins = User.objects.filter(role="ADMIN")
-                for admin in admins:
-                    Notification.objects.create(
-                        user=admin,
-                        title="New Appointment Request",
-                        message=f"New appointment request from {user.full_name} for Dr. {appointment.doctor.user.full_name}",
-                    )
-            except Patient.DoesNotExist:
-                raise serializers.ValidationError(
-                    {"error": "Patient profile not found."}
-                )
-        else:
-            appointment = serializer.save()
+                        # Notify Admins of new appointment
+                        admins = User.objects.filter(role="ADMIN")
+                        for admin in admins:
+                            Notification.objects.create(
+                                user=admin,
+                                title="New Appointment Request",
+                                message=f"New appointment request from {user.full_name} for Dr. {appointment.doctor.user.full_name}",
+                            )
+                    except Patient.DoesNotExist:
+                        raise serializers.ValidationError(
+                            {"error": "Patient profile not found."}
+                        )
+                else:
+                    appointment = serializer.save()
+        except IntegrityError:
+            raise serializers.ValidationError(
+                {"non_field_errors": ["This time slot is already booked. Please choose another."]}
+            )
 
     def perform_update(self, serializer):
-        instance = self.get_object()
-        old_status = instance.status
-        appointment = serializer.save()
+        from django.db import transaction, IntegrityError
 
-        # Check for status changes
-        if old_status != appointment.status:
-            if appointment.status == "APPROVED":
-                # Notify Patient
-                Notification.objects.create(
-                    user=appointment.patient.user,
-                    title="Appointment Approved",
-                    message=f"Your appointment with Dr. {appointment.doctor.user.full_name} has been approved",
-                )
-                # Notify Doctor
-                Notification.objects.create(
-                    user=appointment.doctor.user,
-                    title="New Appointment",
-                    message=f"You have a new appointment with {appointment.patient.user.full_name} on {appointment.appointment_date}",
-                )
-            elif appointment.status == "REJECTED":
-                Notification.objects.create(
-                    user=appointment.patient.user,
-                    title="Appointment Rejected",
-                    message=f"Your appointment with Dr. {appointment.doctor.user.full_name} has been rejected",
-                )
-            elif appointment.status == "VISITED":
-                Notification.objects.create(
-                    user=appointment.patient.user,
-                    title="Consultation Completed",
-                    message=f"Your visit with Dr. {appointment.doctor.user.full_name} has been marked as completed",
-                )
+        try:
+            with transaction.atomic():
+                instance = Appointment.objects.select_for_update().get(id=self.get_object().id)
+                old_status = instance.status
+                appointment = serializer.save()
+
+                # Check for status changes
+                if old_status != appointment.status:
+                    if appointment.status == "APPROVED":
+                        # Notify Patient
+                        Notification.objects.create(
+                            user=appointment.patient.user,
+                            title="Appointment Approved",
+                            message=f"Your appointment with Dr. {appointment.doctor.user.full_name} has been approved",
+                        )
+                        # Notify Doctor
+                        Notification.objects.create(
+                            user=appointment.doctor.user,
+                            title="New Appointment",
+                            message=f"You have a new appointment with {appointment.patient.user.full_name} on {appointment.appointment_date}",
+                        )
+                    elif appointment.status == "REJECTED":
+                        Notification.objects.create(
+                            user=appointment.patient.user,
+                            title="Appointment Rejected",
+                            message=f"Your appointment with Dr. {appointment.doctor.user.full_name} has been rejected",
+                        )
+                    elif appointment.status == "VISITED":
+                        Notification.objects.create(
+                            user=appointment.patient.user,
+                            title="Consultation Completed",
+                            message=f"Your visit with Dr. {appointment.doctor.user.full_name} has been marked as completed",
+                        )
+        except IntegrityError:
+            raise serializers.ValidationError(
+                {"non_field_errors": ["This time slot is already booked. Please choose another."]}
+            )
 
     @action(detail=True, methods=["post"])
     def approve(self, request, pk=None):
         """Approve an appointment - only ADMIN can approve"""
-        appointment = self.get_object()
+        from django.db import transaction
+
         user = request.user
 
         # Only ADMIN can approve appointments
@@ -145,22 +162,31 @@ class AppointmentViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        appointment.status = "APPROVED"
-        appointment.save()
+        with transaction.atomic():
+            appointment = Appointment.objects.select_for_update().get(pk=pk)
 
-        # Notify patient of approval
-        Notification.objects.create(
-            user=appointment.patient.user,
-            title="Appointment Approved",
-            message=f"Your appointment with Dr. {appointment.doctor.user.full_name} has been approved",
-        )
+            if appointment.status != "PENDING":
+                return Response(
+                    {"error": f"Cannot approve appointment in {appointment.status} state."},
+                    status=status.HTTP_409_CONFLICT,
+                )
 
-        # Notify Doctor
-        Notification.objects.create(
-            user=appointment.doctor.user,
-            title="New Appointment Scheduled",
-            message=f"You have a new appointment with {appointment.patient.user.full_name} on {appointment.appointment_date} at {appointment.appointment_time}",
-        )
+            appointment.status = "APPROVED"
+            appointment.save()
+
+            # Notify patient of approval
+            Notification.objects.create(
+                user=appointment.patient.user,
+                title="Appointment Approved",
+                message=f"Your appointment with Dr. {appointment.doctor.user.full_name} has been approved",
+            )
+
+            # Notify Doctor
+            Notification.objects.create(
+                user=appointment.doctor.user,
+                title="New Appointment Scheduled",
+                message=f"You have a new appointment with {appointment.patient.user.full_name} on {appointment.appointment_date} at {appointment.appointment_time}",
+            )
 
         return Response(
             {"status": "APPROVED", "message": "Appointment approved successfully"}
@@ -174,33 +200,43 @@ class AppointmentViewSet(viewsets.ModelViewSet):
           (PENDING or APPROVED).
         - Admins can cancel any appointment.
         """
-        appointment = self.get_object()
+        from django.db import transaction
+
         user = request.user
 
-        can_cancel = False
-        if user.role == "PATIENT" and appointment.patient.user == user:
-            # Only allow cancelling active appointments
-            if appointment.status in ("PENDING", "APPROVED"):
+        with transaction.atomic():
+            appointment = Appointment.objects.select_for_update().get(pk=pk)
+
+            can_cancel = False
+            if user.role == "PATIENT" and appointment.patient.user == user:
+                # Only allow cancelling active appointments
+                if appointment.status in ("PENDING", "APPROVED"):
+                    can_cancel = True
+            elif user.role == "ADMIN":
                 can_cancel = True
-        elif user.role == "ADMIN":
-            can_cancel = True
 
-        if not can_cancel:
-            return Response(
-                {"error": "You do not have permission to cancel this appointment"},
-                status=status.HTTP_403_FORBIDDEN,
-            )
+            if not can_cancel:
+                return Response(
+                    {"error": "You do not have permission to cancel this appointment"},
+                    status=status.HTTP_403_FORBIDDEN,
+                )
 
-        appointment.status = "CANCELLED"
-        appointment.save()
+            if appointment.status in ["CANCELLED", "REJECTED", "VISITED"]:
+                return Response(
+                    {"error": f"Cannot cancel appointment in {appointment.status} state."},
+                    status=status.HTTP_409_CONFLICT,
+                )
 
-        # Notify patient of cancellation (if not cancelled by patient)
-        if appointment.patient.user != user:
-            Notification.objects.create(
-                user=appointment.patient.user,
-                title="Appointment Cancelled",
-                message=f"Your appointment with Dr. {appointment.doctor.user.full_name} has been cancelled",
-            )
+            appointment.status = "CANCELLED"
+            appointment.save()
+
+            # Notify patient of cancellation (if not cancelled by patient)
+            if appointment.patient.user != user:
+                Notification.objects.create(
+                    user=appointment.patient.user,
+                    title="Appointment Cancelled",
+                    message=f"Your appointment with Dr. {appointment.doctor.user.full_name} has been cancelled",
+                )
 
         return Response(
             {"status": "CANCELLED", "message": "Appointment cancelled successfully"}
@@ -209,7 +245,8 @@ class AppointmentViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=["post"])
     def reject(self, request, pk=None):
         """Reject/Decline an appointment - only ADMIN can reject"""
-        appointment = self.get_object()
+        from django.db import transaction
+
         user = request.user
 
         # Only ADMIN can reject appointments
@@ -219,16 +256,25 @@ class AppointmentViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        reason = request.data.get("reason", "No reason provided")
-        appointment.status = "REJECTED"
-        appointment.save()
+        with transaction.atomic():
+            appointment = Appointment.objects.select_for_update().get(pk=pk)
 
-        # Notify patient of rejection
-        Notification.objects.create(
-            user=appointment.patient.user,
-            title="Appointment Rejected",
-            message=f"Your appointment with Dr. {appointment.doctor.user.full_name} has been rejected. Reason: {reason}",
-        )
+            if appointment.status not in ["PENDING", "APPROVED"]:
+                return Response(
+                    {"error": f"Cannot reject appointment in {appointment.status} state."},
+                    status=status.HTTP_409_CONFLICT,
+                )
+
+            reason = request.data.get("reason", "No reason provided")
+            appointment.status = "REJECTED"
+            appointment.save()
+
+            # Notify patient of rejection
+            Notification.objects.create(
+                user=appointment.patient.user,
+                title="Appointment Rejected",
+                message=f"Your appointment with Dr. {appointment.doctor.user.full_name} has been rejected. Reason: {reason}",
+            )
 
         return Response({"status": "REJECTED", "message": "Appointment rejected"})
 
