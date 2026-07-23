@@ -284,15 +284,6 @@ export const Register = () => {
                 {errors.phone && <p className="text-xs text-destructive font-medium ml-1">{errors.phone}</p>}
               </div>
 
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground ml-1">Account Type</label>
-                <div className="relative">
-                  <div className="w-full bg-muted border border-border rounded-xl px-4 py-2.5 sm:py-3 text-muted-foreground text-sm font-medium shadow-sm">
-                    Patient
-                  </div>
-                </div>
-              </div>
-
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground ml-1">Password</label>
